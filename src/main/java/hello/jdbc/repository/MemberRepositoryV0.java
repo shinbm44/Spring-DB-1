@@ -76,6 +76,55 @@ public class MemberRepositoryV0 {
         }
     }
 
+    //수정
+    public void update(String memberId, int money) throws SQLException {
+        String sql = "update member set money=? where member_id=?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, money);
+            pstmt.setString(2, memberId);
+            // 쿼리의 영향을 받은 데이터의 row숫자 반환
+            int resultSize = pstmt.executeUpdate();
+            log.info("result Size={}", resultSize);
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+    }
+
+    //삭제
+    public void delete(String memberId) throws SQLException {
+        String sql = "delete from member where member_id=?";
+
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, memberId);
+            pstmt.executeUpdate();
+            // 쿼리의 영향을 받은 데이터의 row숫자 반환
+            int resultSize = pstmt.executeUpdate();
+            log.info("result Size={}", resultSize);
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, null);
+        }
+
+    }
+
+
     // PrepareStatement는 Statement에 비해서 파라미터 바인딩이 가능하도록 기능이 더 많다.(+sql injection방지)
     // Statement는 sql을 그냥 넣는 것.
     private void close(Connection con, Statement stmt, ResultSet rs) {
