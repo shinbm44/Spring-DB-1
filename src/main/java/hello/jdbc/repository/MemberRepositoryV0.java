@@ -5,6 +5,7 @@ import hello.jdbc.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
+import java.util.NoSuchElementException;
 
 /**
  * JDBC - DriverManager 사용
@@ -39,6 +40,41 @@ public class MemberRepositoryV0 {
         }
     }
 
+
+    // 조회기능
+    public Member findById(String memberId) throws SQLException {
+        String sql = "select * from member where member_id = ?";
+
+        // 이렇게 null으로 선언하는 이유는 try catch문에서 null체크 하기 때문
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try{
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, memberId);
+
+            // select는 executeQuery이고 executeUpdate는 변경
+            // rs는 select 쿼리의 결과를 담고 있다.
+            rs = pstmt.executeQuery();
+
+            if( rs.next()) {
+                Member member = new Member();
+                member.setMemberId(rs.getString("member_id"));
+                member.setMoney(rs.getInt("money"));
+                return member;
+            } else {
+                throw new NoSuchElementException("member not found memberId = " + memberId);
+            }
+
+
+        } catch (SQLException e) {
+            log.error("db error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, rs);
+        }
+    }
 
     // PrepareStatement는 Statement에 비해서 파라미터 바인딩이 가능하도록 기능이 더 많다.(+sql injection방지)
     // Statement는 sql을 그냥 넣는 것.
