@@ -18,21 +18,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
- * 트랜잭션 - 커넥션 파라미터 전달 방식 동기화
+ * 트랜잭션 - 트랜잭션 매니저
  */
 class MemberServiceV3_1Test {
     private MemberRepositoryV3 memberRepository;
     private MemberServiceV3_1 memberService;
     @BeforeEach
     void before() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource(URL,
-                USERNAME, PASSWORD);
+        DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
         memberRepository = new MemberRepositoryV3(dataSource);
 
+        //jdbc와 관련된 PlatformTransactionManager은 DataSourceTransactionManager이다.
         PlatformTransactionManager transactionManager = new DataSourceTransactionManager(dataSource);
 
         memberService = new MemberServiceV3_1(transactionManager, memberRepository);
     }
+
     @AfterEach
     void after() throws SQLException {
         memberRepository.delete("memberA");
