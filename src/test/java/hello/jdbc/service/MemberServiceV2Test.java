@@ -14,6 +14,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * 트랜잭션 - 커넥션 파라미터 전달 방식 동기화
  */
 class MemberServiceV2Test {
+
+
     private MemberRepositoryV2 memberRepository;
     private MemberServiceV2 memberService;
     @BeforeEach

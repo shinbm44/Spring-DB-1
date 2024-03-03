@@ -20,6 +20,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * 트랜잭션 - 트랜잭션 매니저
  */
 class MemberServiceV3_2Test {
+
+
     private MemberRepositoryV3 memberRepository;
     private MemberServiceV3_2 memberService;
     @BeforeEach

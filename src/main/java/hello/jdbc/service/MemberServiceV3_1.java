@@ -55,18 +55,6 @@ public class MemberServiceV3_1 {
         // 비즈니스 로직 끝
     }
 
-    //jdbcutils를 사용해도 좋으나 다른 클라이언트가 돌아간 커넥션 풀의 커넥션을 획득할 시,
-    // autocommit이 false인 상태이다. 본래 autocommit은 true가 디폴트, 그래서 true로 바꿔준다.
-    private static void release(Connection con) {
-        if (con != null ) {
-            try {
-                con.setAutoCommit(true); // 커넥션 풀로 돌아가면 autocommit을 디폴트로..
-                con.close();
-            } catch (Exception e) {
-                log.info("error", e);
-            }
-        }
-    }
 
     private void validation(Member toMember) {
         if ( toMember.getMemberId().equals("ex")) {
